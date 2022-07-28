@@ -1,44 +1,33 @@
 import "./App.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Home from "./Home";
-
+import Search from "./Search";
+import * as BooksAPI from "./BooksAPI";
+import { Route, Routes } from "react-router-dom";
 function App() {
-  const [showSearchPage, setShowSearchpage] = useState(false);
+  const [booksInfo, setBooksInfo] = useState([]);
+  const [currentReading, setCurrentRead] = useState([]);
+  const [wantToRead, setWantToRead] = useState([]);
+  const [read, setRead] = useState([]);
+
+  console.log(booksInfo);
+  useEffect(() => {
+    const getBookInfo = async () => {
+      const res = await BooksAPI.getAll();
+      setBooksInfo(res);
+    };
+    getBookInfo();
+  }, []);
 
   return (
-    <div className="app">
-      {showSearchPage ? (
-        <div className="search-books">
-          <div className="search-books-bar">
-            <a
-              className="close-search"
-              onClick={() => setShowSearchpage(!showSearchPage)}
-            >
-              Close
-            </a>
-            <div className="search-books-input-wrapper">
-              <input
-                type="text"
-                placeholder="Search by title, author, or ISBN"
-              />
-            </div>
-          </div>
-          <div className="search-books-results">
-            <ol className="books-grid"></ol>
-          </div>
-        </div>
-      ) : (
-        <div className="list-books">
-          <div className="list-books-title">
-            <h1>MyReads</h1>
-          </div>
-          <Home />
-          <div className="open-search">
-            <a onClick={() => setShowSearchpage(!showSearchPage)}>Add a book</a>
-          </div>
-        </div>
-      )}
-    </div>
+    <Routes>
+      <Route
+        exact
+        path="/"
+        element={<Home booksInfo={booksInfo} setBooksInfo={setBooksInfo} />}
+      />
+      <Route path="/search" element={<Search booksInfo={booksInfo} />} />
+    </Routes>
   );
 }
 
