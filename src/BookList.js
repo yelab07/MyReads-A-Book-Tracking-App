@@ -11,26 +11,18 @@ function BookList({
   isSearching,
   setBooksInfo,
 }) {
-  //   const changeInShelf = (event) => {
-  //     event.target.value !== "move" && !isSearching
-  //       ? BooksAPI.update(book, event.target.value).then((response) =>
-  //           BooksAPI.getAll().then((newBooks) => {
-  //             setBooksInfo(newBooks);
-  //           })
-  //         )
-  //       : BooksAPI.update(book, event.target.value);
-  //   };
   const changeInShelf = (event) => {
     if (event.target.value !== "move") {
-      if (!isSearching) {
-        BooksAPI.update(book, event.target.value).then((response) =>
-          BooksAPI.getAll().then((newBooks) => {
-            setBooksInfo(newBooks);
-          })
-        );
-      } else {
-        BooksAPI.update(book, event.target.value);
-      }
+      BooksAPI.update(book, event.target.value).then((response) =>
+        BooksAPI.getAll().then((newBooks) => {
+          setBooksInfo(newBooks);
+        })
+      );
+    }
+  };
+  const changeInSearchShelf = (event) => {
+    if (event.target.value !== "move") {
+      BooksAPI.update(book, event.target.value);
     }
   };
 
@@ -49,9 +41,13 @@ function BookList({
           <div className="book-shelf-changer">
             <select
               onChange={(event) => {
-                event.preventDefault();
-                changeInShelf(event);
-                // (event) => console.log("clicked", event)
+                // event.preventDefault();
+                if (!isSearching) {
+                  changeInShelf(event);
+                } else {
+                  changeInSearchShelf(event);
+                }
+                console.log(bookShelf);
               }}
               defaultValue={bookShelf}
             >

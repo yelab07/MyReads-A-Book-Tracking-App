@@ -5,19 +5,19 @@ function Book({ booksInfo, setBooksInfo }) {
   // console.log(booksInfo.authors);
   return (
     <>
-      {booksInfo.map((item, index) => {
-        return (
-          <BookList
-            key={index}
-            title={item.title}
-            authors={item.authors}
-            imageUrl={item.imageLinks && item.imageLinks.thumbnail}
-            bookshelf={item.shelf}
-            book={item}
-            setBooksInfo={setBooksInfo}
-          />
-        );
-      })}
+      {booksInfo &&
+        booksInfo.map((item, index) => (
+          <li key={index}>
+            <BookList
+              title={item.title}
+              authors={item.authors}
+              imageUrl={item.imageLinks && item.imageLinks.thumbnail}
+              bookShelf={item.shelf}
+              book={item}
+              setBooksInfo={setBooksInfo}
+            />
+          </li>
+        ))}
     </>
   );
 }

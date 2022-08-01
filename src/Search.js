@@ -13,13 +13,17 @@ function Search() {
 
     setCaracterTyped(e.target.value);
   };
-  console.log(caracterTyped);
+  // console.log(caracterTyped);
 
-  const getBook = async (e) => {
+  const getBook = (e) => {
     if (caracterTyped.length !== 0) {
-      await BooksAPI.search(caracterTyped).then((zBooks) => {
+      BooksAPI.search(caracterTyped).then((zBooks) => {
+        console.log(zBooks);
+
         if (!zBooks.error) {
           BooksAPI.getAll().then((bookRes) => {
+            console.log(bookRes);
+
             setBooks(setShelves(zBooks, bookRes));
           });
         } else {
@@ -42,9 +46,11 @@ function Search() {
       return { ...book, shelf: "none" };
     });
   };
+
   useEffect(() => {
     getBook(caracterTyped);
   }, [caracterTyped]);
+
   return (
     <div>
       <div className="search-books">
@@ -69,7 +75,7 @@ function Search() {
                   title={item.title}
                   authors={item.authors}
                   imageUrl={item.imageLinks && item.imageLinks.thumbnail}
-                  bookshelf={item.shelf}
+                  bookShelf={item.shelf}
                   book={item}
                   isSearching
                 />
